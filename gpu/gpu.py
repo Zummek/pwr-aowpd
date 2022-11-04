@@ -25,12 +25,18 @@ def testing_value(testValue, testValueMinusOne, powerOfTwo):
 
     # For "powerOfTwo" gpu cores:
     for _ in range(1, powerOfTwo):
+
         # Divide between gpu cores?
         #
         xSquer = pow(x, 2, testValue)
         check_squared_value(x, xSquer, testValue)
         x = xSquer
         #
+
+    # if "all cores return True":
+    #     return True
+    # else:
+    #     return False
 
 
 def miller_rabin_cpu(testValue, repetitions):
@@ -47,6 +53,7 @@ def miller_rabin_cpu(testValue, repetitions):
 
     # For "repetitions" gpu cores:
     for _ in range(1, repetitions):
+
         # Divide between gpu cores?
         #
         testing_value(testValue, testValueMinusOne, powerOfTwo)
