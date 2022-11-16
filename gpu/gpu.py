@@ -39,7 +39,7 @@ def testing_value(testValue, testValueMinusOne, powerOfTwo):
     #     return False
 
 
-def miller_rabin_cpu(testValue, repetitions):
+def miller_rabin_gpu(testValue, repetitions):
     """Returns True if testValue is probably prime, False if it's definitely composite."""
     if testValue < 3:
         return False
