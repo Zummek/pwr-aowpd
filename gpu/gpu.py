@@ -2,13 +2,12 @@ from random import random
 
 
 def check_squared_value(x, xSquer, testValue):
-    if x == testValue - 1:
-        if x != testValue - 1:
-            return False
-        else:
-            return True
-    if xSquer == 1:
+    if x != testValue - 1:
         return False
+    elif xSquer == 1:
+        return False
+    else:
+        return True
 
 
 # Run function on gpu "repetitions" cores
