@@ -11,7 +11,7 @@ def testing_value(powerOfTwo, testValue):
 
     while powerOfTwo != testValue - 1:
         # Divide between gpu cores?
-        x = (x * x) % testValue
+        x = pow(x, 2, testValue)
         powerOfTwo *= 2
 
         if x == 1:
