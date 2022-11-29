@@ -5,8 +5,11 @@ import sys
 import time
 
 # Initialization of PyOpenCl
-platform = cl.get_platforms()[0]  # Select the first platform [0]
-device = platform.get_devices()[0]  # Select the first device on this platform [0]
+# Select the first platform [0]
+platform = cl.get_platforms()[0]
+
+# Select the first device on this platform [0]
+device = platform.get_devices()[0]
 
 # platform and device check
 # print(platform, device)
@@ -18,7 +21,7 @@ queue = cl.CommandQueue(ctx)
 mf = cl.mem_flags
 
 
-def gpu_power(testValue, repetitions):
+def miller_rabin_gpu(testValue, repetitions):
 
     # Find max power of 2 that divides testValue - 1
     powerOfTwo = 0
@@ -28,7 +31,7 @@ def gpu_power(testValue, repetitions):
         testValueMinusOne //= 2
         powerOfTwo += 1
 
-    #generate rundom numbers
+    # generate rundom numbers
     random_values = np.random.randint(2, testValue-2, size=repetitions)
 
     testVal_arr = np.empty_like(random_values)
@@ -47,9 +50,8 @@ def gpu_power(testValue, repetitions):
 
     # params in kernel
     "a_g / x - number random" \
-    "b_g / z - modulus test val" \
-    "c_g / y - power powerof two"
-
+        "b_g / z - modulus test val" \
+        "c_g / y - power powerof two"
 
     prg = cl.Program(ctx, """
             __kernel void power(
@@ -104,10 +106,11 @@ def gpu_power(testValue, repetitions):
     krnl = prg.power
 
     # run kernel func
-    krnl(queue, random_values.shape , None, a_g, b_g, c_g, res_g) # queue, size of array, None, params to func pow
+    # queue, size of array, None, params to func pow
+    krnl(queue, random_values.shape, None, a_g, b_g, c_g, res_g)
 
     # copy data from c back to array in Python
     cl.enqueue_copy(queue, c_np, res_g)
     queue.finish()
 
-    return not(np.all(c_np))
+    return not (np.all(c_np))
