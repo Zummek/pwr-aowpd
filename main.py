@@ -1,7 +1,9 @@
 import os
 from cpu.cpu import miller_rabin_cpu
 from helpers.stopwatch import stopwatch
-
+import gpu.gpu as gpu
+import time
+import numpy as np
 
 def clear_screen():
     if (os.name == 'posix'):
@@ -82,4 +84,14 @@ def run_menu():
 
 
 if __name__ == '__main__':
-    run_menu()
+    # run_menu()
+    val = 100003157
+    start = time.time()
+    x = (miller_rabin_cpu(val, 100000))
+    end = time.time()
+    print(x, end-start)
+    start = time.time()
+    y = gpu.gpu_power(val, 100000)
+    end = time.time()
+    print(y, end-start)
+
