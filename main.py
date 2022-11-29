@@ -1,9 +1,9 @@
 import os
-from cpu.cpu import miller_rabin_cpu
+
 from helpers.stopwatch import stopwatch
-import gpu.gpu as gpu
-import time
-import numpy as np
+from gpu.gpu import miller_rabin_gpu
+from cpu.cpu import miller_rabin_cpu
+
 
 def clear_screen():
     if (os.name == 'posix'):
@@ -21,6 +21,13 @@ def select_menu_option(default_value):
         return default_value
 
 
+def run_both(val=1002345987234840712, quality=10000000):
+    result = stopwatch(miller_rabin_cpu)(val, quality)
+    print("CPU: ", result)
+    result = stopwatch(miller_rabin_gpu)(val, quality)
+    print("GPU: ", result)
+
+
 def run_menu():
     select = -1
     while select != 0:
@@ -29,6 +36,7 @@ def run_menu():
         print("\nMiller–Rabin primality test.\n")
         print("1. Run algorithm on CPU implementation.")
         print("2. Run algorithm on GPU implementation.")
+        print("3. Run both algorithms implementation.")
         print("0. Exit.")
         select = select_menu_option(select)
 
@@ -80,18 +88,25 @@ def run_menu():
 
                     input("\nPress Enter to continue...")
 
+        elif select == 3:
+            while select2 != 0:
+                clear_screen()
+                print("\nBoth algorithms implementation.\n")
+                print("1. Enter data from the keyboard.")
+                print("0. Go back.")
+                select2 = select_menu_option(select2)
+
+                if select2 == 1:
+                    clear_screen()
+                    print("\nEnter data from the keyboard.\n")
+                    n = int(input("Enter odd integer to be tested for primality: "))
+                    k = int(input("Enter number of rounds of testing to perform: "))
+
+                    run_both(n, k)
+                    input("\nPress Enter to continue...")
+
     print("\nEXIT")
 
 
 if __name__ == '__main__':
-    # run_menu()
-    val = 100003157
-    start = time.time()
-    x = (miller_rabin_cpu(val, 100000))
-    end = time.time()
-    print(x, end-start)
-    start = time.time()
-    y = gpu.gpu_power(val, 100000)
-    end = time.time()
-    print(y, end-start)
-
+    run_menu()
