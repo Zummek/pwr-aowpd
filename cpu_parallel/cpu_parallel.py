@@ -5,8 +5,12 @@ import numpy as np
 import psutil
 import math
 
+
 def miller_rabin_cpu_parallel(testValue, repetitions):
     """Returns True if testValue is probably prime, False if it's definitely composite."""
+    manager = Manager()
+    valueIsNotPrime = manager.Value('b', False)
+
     if testValue < 3:
         return False
 
@@ -16,34 +20,41 @@ def miller_rabin_cpu_parallel(testValue, repetitions):
     while testValueMinusOne % 2 == 0:
         testValueMinusOne //= 2
         powerOfTwo += 1
-    # Get number of cores on cpu
-    n_cpus = psutil.cpu_count()
 
-    # List for result
-    primeList = np.empty(repetitions)
+    # Get number of cores
+    coreCount = psutil.cpu_count(logical=False)
 
-    # List for jobs
-    jobs = []
+    # Create a list of processes
+    processes = []
 
-    reps = math.ceil(repetitions / n_cpus)
+    # Create a process for each core
+    for i in range(coreCount):
+        processes.append(Process(target=cpu_check_number, args=(
+            i, coreCount, testValue, powerOfTwo, repetitions, valueIsNotPrime)))
 
-    # Run algorithm on cores
-    for x in range(n_cpus):
-        job = Process(target=cpu_check_number, args=[x, testValue, powerOfTwo, primeList, reps], )
-        jobs.append(job)
+    # Start all processes
+    for process in processes:
+        process.start()
 
-    for job in jobs:
-        job.start()
+    # Wait for all processes to finish
+    for process in processes:
+        process.join()
 
-    for job in jobs:
-        job.join()
+    # Check if any of the processes found a composite number
+    if valueIsNotPrime.value:
+        return False
 
-    return not (np.all(primeList))
+    # If we got this far, testValue is probably prime
+    return True
 
 
-def cpu_check_number(index, testValue, powerOfTwo, primeList, reps):
+def cpu_check_number(index, coreCount, testValue, powerOfTwo, allRepetitions, valueIsNotPrime):
+    """Returns True(0) if testValue is probably prime, False(1) if it's definitely composite."""
 
-    for _ in range(1, reps):
+    # Calculate the number of repetitions for each process
+    coreRepetitions = math.ceil(allRepetitions / coreCount)
+
+    for _ in range(1, coreRepetitions):
         # Choose a random number between 2 and testValue - 2
         randomValue = int(random() * (testValue - 3)) + 2
 
@@ -52,7 +63,6 @@ def cpu_check_number(index, testValue, powerOfTwo, primeList, reps):
 
         # If x is 1 or testValue - 1, we don't know if testValue is prime, so we'll try again
         if x == 1 or x == testValue - 1:
-
             continue
 
         # Otherwise, we'll keep squaring x and checking if it's equal to testValue - 1
@@ -62,14 +72,14 @@ def cpu_check_number(index, testValue, powerOfTwo, primeList, reps):
 
             x = pow(x, 2, testValue)
             if x == 1:
-                primeList[index] = 1
-                break
+                valueIsNotPrime.value = True
+                return
 
         # If x != testValue - 1, then we know that testValue is definitely composite
         if x != testValue - 1:
-            primeList[index] = 1
-            break
+            valueIsNotPrime.value = True
+            return
 
     # If we got this far, testValue is probably prime
-    primeList[index] = 0
-    return True
+    valueIsNotPrime.value = False
+    return

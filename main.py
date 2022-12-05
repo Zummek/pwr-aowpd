@@ -5,6 +5,7 @@ from gpu.gpu import miller_rabin_gpu
 from cpu.cpu import miller_rabin_cpu
 from cpu_parallel.cpu_parallel import miller_rabin_cpu_parallel
 
+
 def clear_screen():
     if (os.name == 'posix'):
         os.system('clear')
@@ -21,7 +22,7 @@ def select_menu_option(default_value):
         return default_value
 
 
-def run_both(val=4754597 , quality=100000000):
+def run_both(val=1002345987236, quality=10000000):
     result = stopwatch(miller_rabin_cpu)(val, quality)
     print("CPU: ", result)
     result = stopwatch(miller_rabin_cpu_parallel)(val, quality)
