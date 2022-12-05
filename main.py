@@ -21,7 +21,7 @@ def select_menu_option(default_value):
         return default_value
 
 
-def run_both(val=1002345987234840712, quality=10000000):
+def run_both(val=4754597, quality=100000000):
     result = stopwatch(miller_rabin_cpu)(val, quality)
     print("CPU: ", result)
     result = stopwatch(miller_rabin_gpu)(val, quality)
