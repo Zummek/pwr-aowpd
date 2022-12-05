@@ -16,11 +16,18 @@ def miller_rabin_cpu_parallel(testValue, repetitions):
     while testValueMinusOne % 2 == 0:
         testValueMinusOne //= 2
         powerOfTwo += 1
-
+    # Get number of cores on cpu
     n_cpus = psutil.cpu_count()
+
+    # List for result
     primeList = np.empty(repetitions)
+
+    # List for jobs
     jobs = []
+
     reps = math.ceil(repetitions / n_cpus)
+
+    # Run algorithm on cores
     for x in range(n_cpus):
         job = Process(target=cpu_check_number, args=[x, testValue, powerOfTwo, primeList, reps], )
         jobs.append(job)
@@ -31,8 +38,8 @@ def miller_rabin_cpu_parallel(testValue, repetitions):
     for job in jobs:
         job.join()
 
-
     return not (np.all(primeList))
+
 
 def cpu_check_number(index, testValue, powerOfTwo, primeList, reps):
 
