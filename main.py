@@ -79,6 +79,7 @@ def run_menu():
                     n = int(input("Enter odd integer to be tested for primality: "))
                     k = int(input("Enter number of rounds of testing to perform: "))
 
+                    print("Result: ", stopwatch(miller_rabin_gpu)(n, k))
                     input("\nPress Enter to continue...")
 
                 elif select2 == 2:
