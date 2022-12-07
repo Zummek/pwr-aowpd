@@ -1,36 +1,40 @@
 __kernel void miller_rabin_gpu(
-  __global float* testValue_buf,
+  __global double* testValue_buf,
   __global int* powerOfTwo_buf,
-  __global float* testValueMinusOne_buf,
+  __global int* testValueMinusOne_buf,
   __global float* random_values_buf,
   __global int* result_buf
 )
 {
   int gid = get_global_id(0);
 
-  float testValue = testValue_buf[gid];
+  double testValue = testValue_buf[gid];
   int powerOfTwo = powerOfTwo_buf[gid];
-  float testValueMinusOne = testValueMinusOne_buf[gid];
+  int testValueMinusOne = testValueMinusOne_buf[gid];
   float randomNumber = random_values_buf[gid];
 
-  int isPrimeResult = 0;
+  int isPrimeResult = 1;
 
-  float x = pow(randomNumber, testValueMinusOne);
+  double x = pown(randomNumber, testValueMinusOne);
+  printf("1 randomNumber: %f, x: %f, %f, %d\n", randomNumber, x, testValue, testValueMinusOne);
   x = fmod(x, testValue);
+  printf("2 randomNumber: %f, x: %f, %f, %d\n", randomNumber, x, testValue, testValueMinusOne);
 
   if (x != 1 && x != testValue - 1) {
     int i = 0;
     while (i < powerOfTwo && x != testValue - 1) {
-      x = pow(x, 2);
+      x = pown(x, 2);
       x = fmod(x, testValue);
+      // printf("1 x: %f", x);
       if (x == 1) {
-        isPrimeResult = 1;
+        isPrimeResult = 0;
         break;
       }
       i++;
     }
 
     if (x != testValue - 1) {
+      // printf("2 x: %f", x);
       isPrimeResult = 0;
     }
   }
