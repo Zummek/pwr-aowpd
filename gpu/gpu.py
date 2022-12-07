@@ -1,8 +1,7 @@
 from random import random
 import pyopencl as cl
 import numpy as np
-import sys
-import time
+
 
 # Initialization of PyOpenCl
 # Select the first platform [0]

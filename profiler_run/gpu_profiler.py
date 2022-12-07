@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import time
 
+
 # Initialization of PyOpenCl
 # Select the first platform [0]
 platform = cl.get_platforms()[0]
