@@ -1,1 +1,2 @@
 pyopencl==2022.3
+psutil==5.9.4

@@ -1,8 +1,7 @@
 from random import random
 import pyopencl as cl
 import numpy as np
-import sys
-import time
+
 
 # Initialization of PyOpenCl
 # Select the first platform [0]
@@ -32,7 +31,7 @@ def miller_rabin_gpu(testValue, repetitions):
         powerOfTwo += 1
 
     # generate rundom numbers
-    random_values = np.random.randint(2, testValue-2, size=repetitions)
+    random_values = np.random.randint(2, testValue-2, size=repetitions, dtype=np.int64)
 
     testVal_arr = np.empty_like(random_values)
     testVal_arr.fill(testValue)
