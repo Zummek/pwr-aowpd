@@ -6,7 +6,7 @@
 #define DOUBLE_SUPPORT_AVAILABLE
 #endif
 
-typedef double real_t;
+typedef double real2_t;
 
 __kernel void miller_rabin_gpu(
   __global double* testValue_buf,
