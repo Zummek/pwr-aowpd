@@ -14,16 +14,12 @@ def miller_rabin_cpu(testValue, repetitions):
         testValueMinusOne //= 2
         powerOfTwo += 1
 
-    # for _ in range(1, repetitions):
-    bbb = [6,  9,  5,  9,  4, 15, 13, 10, 12, 15, 13,  5, 14,  3,  6,  2,  8,  5,
-           2,  9, 13,  5,  6, 15, 13,  3,  4,  9, 11,  9]
-    for randomValue in bbb:
+    for _ in range(1, repetitions):
         # Choose a random number between 2 and testValue - 2
-        # randomValue = int(random() * (testValue - 3)) + 2
+        randomValue = int(random() * (testValue - 3)) + 2
 
         # Calculate randomValue^testValueMinusOne mod testValue
         x = pow(randomValue, testValueMinusOne, testValue)
-        print("randomValue:", randomValue, ", x: ", x)
 
         # If x is 1 or testValue - 1, we don't know if testValue is prime, so we'll try again
         if x == 1 or x == testValue - 1:
@@ -35,13 +31,11 @@ def miller_rabin_cpu(testValue, repetitions):
                 break
 
             x = pow(x, 2, testValue)
-            # print("1 x: ", x)
             if x == 1:
                 return False
 
         # If x != testValue - 1, then we know that testValue is definitely composite
         if x != testValue - 1:
-            # print("x != testValue - 1: ", x)
             return False
 
     # If we got this far, testValue is probably prime
