@@ -1,7 +1,7 @@
-from .cpu import miller_rabin_cpu
+from .cpu_parallel import miller_rabin_cpu_parallel
 
 
-def test_miller_rabin_cpu():
+def test_miller_rabin_cpu_parallel():
     primeValues = [
         5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61,
         67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137,
@@ -42,13 +42,13 @@ def test_miller_rabin_cpu():
     ]
 
     for primeValue in primeValues:
-        assert miller_rabin_cpu(primeValue, 1000) is True
+        assert miller_rabin_cpu_parallel(primeValue, 1000) is True
 
     for notPrimeValue in notPrimeValues:
-        assert miller_rabin_cpu(notPrimeValue, 1000) is False
+        assert miller_rabin_cpu_parallel(notPrimeValue, 1000) is False
 
     for primeValue in primeValues:
-        assert miller_rabin_cpu(primeValue, 100000) is True
+        assert miller_rabin_cpu_parallel(primeValue, 100000) is True
 
     for notPrimeValue in notPrimeValues:
-        assert miller_rabin_cpu(notPrimeValue, 100000) is False
+        assert miller_rabin_cpu_parallel(notPrimeValue, 100000) is False
