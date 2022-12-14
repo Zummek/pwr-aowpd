@@ -41,4 +41,5 @@ def miller_rabin_cpu(testValue, repetitions):
     return True
 
 if __name__ == '__main__':
-    print(miller_rabin_cpu(2147483647, 10000000))
+    input("\nPress Enter to run...")
+    print(miller_rabin_cpu(46337, 1000000))

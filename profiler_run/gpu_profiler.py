@@ -73,4 +73,4 @@ def miller_rabin_gpu(testValue, repetitions):
 
 
 if __name__ == '__main__':
-    print(miller_rabin_gpu(2147483647, 10000000))
+    print(miller_rabin_gpu(46337, 1000000))

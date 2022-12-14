@@ -1,9 +1,12 @@
 import os
 
+from cpu_parallel.cpu_test import test_miller_rabin_cpu_parallel
 from helpers.stopwatch import stopwatch
 from gpu.gpu import miller_rabin_gpu
 from cpu.cpu import miller_rabin_cpu
 from cpu_parallel.cpu_parallel import miller_rabin_cpu_parallel
+
+import time
 
 
 def clear_screen():
@@ -22,13 +25,44 @@ def select_menu_option(default_value):
         return default_value
 
 
-def run_both(val=4754597, quality=100000000):
+def run_both(val, quality):
     result = stopwatch(miller_rabin_cpu)(val, quality)
     print("CPU: ", result)
     result = stopwatch(miller_rabin_cpu_parallel)(val, quality)
     print("CPU parallel: ", result)
     result = stopwatch(miller_rabin_gpu)(val, quality)
     print("GPU: ", result)
+
+def run_both_test(val, quality, iterations):
+    result_true_cpu = 0
+    start = time.time()
+    for i in range(iterations):
+        if stopwatch(miller_rabin_cpu)(val, quality):
+            result_true_cpu += 1
+    end = time.time()
+    time_cpu = (end - start) / iterations
+
+    result_true_cpu_parallel = 0
+    start = time.time()
+    for i in range(iterations):
+        if stopwatch(miller_rabin_cpu_parallel)(val, quality):
+            result_true_cpu_parallel += 1
+    end = time.time()
+    time_cpu_parallel = (end - start) / iterations
+
+    result_true_gpu = 0
+    start = time.time()
+    for i in range(iterations):
+        if stopwatch(miller_rabin_gpu)(val, quality):
+            result_true_gpu += 1
+    end = time.time()
+    time_gpu = (end - start) / iterations
+
+    print("\n")
+    print("CPU for", iterations, "iterations took", time_cpu, "s and returned TRUE", result_true_cpu, "times.")
+    print("CPU parallel for", iterations, "iterations took", time_cpu_parallel, "s and returned TRUE",
+          result_true_cpu_parallel, "times.")
+    print("GPU for", iterations, "iterations took", time_gpu, "s and returned TRUE", result_true_gpu, "times.")
 
 
 def run_menu():
@@ -113,4 +147,6 @@ def run_menu():
 
 
 if __name__ == '__main__':
-    run_both()
+    # run_both(46337, 1000000)
+    # run_both_test(997, 1000000, 100)
+    miller_rabin_cpu(46337, 1000000)

@@ -84,4 +84,5 @@ def cpu_check_number(index, coreCount, testValue, powerOfTwo, allRepetitions, va
     return
 
 if __name__ == '__main__':
-    print(miller_rabin_cpu_parallel(34565434, 10000000))
+    input("\nPress Enter to run...")
+    print(miller_rabin_cpu_parallel(46337, 1000000))
